@@ -21,5 +21,8 @@ export class ShoppingListComponent{
     ngOnInit(){
 
     }
+    newIngredientAdded(ingredient:IngredientModel){
+        this.ingredients.push(ingredient);
+    }
 
 }

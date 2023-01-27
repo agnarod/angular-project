@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { RecipeModel } from '../recipe.model';
 
 @Component({
@@ -15,10 +15,16 @@ export class RecipeListComponent {
     new RecipeModel("A test recipe4", "this is simply a test4", "https://freesvg.org/img/RecipeBook.png")
   ];
 
+  @Output() onRecipeSelected = new EventEmitter<RecipeModel>();
+
   constructor(){}
 
   ngOnInit(){
 
+  }
+
+  onSelected(selectedRecipe:RecipeModel){
+    this.onRecipeSelected.emit(selectedRecipe);
   }
 
 }
