@@ -1,5 +1,4 @@
-import { Component, OnInit } from "@angular/core";
-import { RecipeModel } from "./recipe.model";
+import { Component } from "@angular/core";
 import { RecipeService } from "./recipe.service";
 
 @Component ({
@@ -13,7 +12,7 @@ import { RecipeService } from "./recipe.service";
 export class RecipesComponent{
 
 
-    constructor(private recipeService: RecipeService){}
+    constructor(){}
 
 
 
