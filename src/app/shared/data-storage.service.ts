@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map, tap } from "rxjs";
+import { catchError, map, tap, throwError } from "rxjs";
+import { AuthService } from "../auth/auth.service";
 import { RecipeModel } from "../recipes/recipe.model";
 import { RecipeService } from "../recipes/recipe.service";
 
@@ -9,32 +10,41 @@ import { RecipeService } from "../recipes/recipe.service";
 })
 export class DataStorageService {
 
-    constructor(private http: HttpClient, private recipeServ: RecipeService) { }
+    constructor(private http: HttpClient, 
+        private recipeServ: RecipeService, 
+        private authServ: AuthService) { }
 
     storeRecipes() {
         const recipes = this.recipeServ.getRecipes();
-        this.http.put(
-            'https://ng-recipe-book-b1937-default-rtdb.firebaseio.com/recipes.json',
-            recipes
-        ).subscribe(response => {
-            console.log(response);
-
-        });
+        return this.http.put<RecipeModel[]>(
+            'http://localhost:8080/recipebook/recipes',
+            JSON.stringify(recipes)
+        ).
+        pipe(
+            catchError(err=>{
+                return throwError(err);;
+            }),
+            tap(resData=>{
+                
+            })
+        );
     }
 
     fetchRecipes() {
-        
+       
         return this.http.get<RecipeModel[]>(
-            'https://ng-recipe-book-b1937-default-rtdb.firebaseio.com/recipes.json'
-        )
-        .pipe(map((recipes) => {
+            'http://localhost:8080/recipebook/recipes'
+        ).pipe(map((recipes) => {
+            
             return recipes.map(recipe=>{
                 return {...recipe, ingredients : recipe.ingredients ? recipe.ingredients : []}
             })
         }),
         tap((recipes)=>{
             this.recipeServ.fetchRecipes(recipes);
-        }));
+        })
+        );
     }
+    
 
 }
