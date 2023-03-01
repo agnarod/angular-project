@@ -127,9 +127,11 @@ export class AuthService {
 
 
     private handleError(errorRes: HttpErrorResponse) {
-        let errorMessage = 'An unkown error ocurred!';
+        console.log(errorRes);
+        
+        let errorMessage = "An unkown error ocurred!";
         if (!errorRes.error || !errorRes.error.error) {
-            return throwError(errorMessage)
+            return throwError(errorRes.message);
         }
         switch (errorRes.error.error.message) {
             case 'EMAIL_EXISTS':
